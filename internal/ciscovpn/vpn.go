@@ -8,6 +8,8 @@ import (
 
 func vpnDisconnect() bool {
 	cmd := exec.Command(`C:\Program Files (x86)\Cisco\Cisco AnyConnect Secure Mobility Client\vpncli.exe`, `disconnect`)
+	go waitAndKill(cmd)
+
 	out, _ := cmd.Output()
 	buff := bytes.NewBuffer(out)
 
@@ -24,4 +26,11 @@ func vpnDisconnect() bool {
 	}
 
 	return false
+}
+
+func waitAndKill(cmd *exec.Cmd) {
+	Sleep(1500)
+	if cmd != nil {
+		cmd.Process.Kill()
+	}
 }

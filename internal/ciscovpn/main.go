@@ -34,6 +34,7 @@ func Stop() {
 	result = vpnDisconnect()
 	if !result {
 		fmt.Println("[ERR05] Failed to disconnect VPN!")
+		fmt.Println("[.....] The service was probably stopped earlier.")
 		return
 	}
 

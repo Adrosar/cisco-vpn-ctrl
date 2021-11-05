@@ -27,7 +27,7 @@ func main() {
 		return
 	}
 
-	fmt.Println("Cisco VPN Controller (v0.1.0)")
+	fmt.Println("Cisco VPN Controller (v0.2.0)")
 	fmt.Println("----------------------------------------------")
 	fmt.Println("What do you want to do?")
 	fmt.Println("- start : Start the service and UI")
@@ -58,6 +58,10 @@ func main() {
 }
 
 func waitAndExit() {
-	ciscovpn.Sleep(5000)
+	fmt.Print(`Terminal closing in:`)
+	for i := 5; i > 0; i-- {
+		fmt.Print(` `, i)
+		ciscovpn.Sleep(1000)
+	}
 	os.Exit(0)
 }
