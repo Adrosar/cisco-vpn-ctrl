@@ -33,9 +33,8 @@ func Stop() {
 
 	result = vpnDisconnect()
 	if !result {
-		fmt.Println("[ERR05] Failed to disconnect VPN!")
+		fmt.Println("[WAR01] A problem occurred while disconnecting from VPN.")
 		fmt.Println("[.....] The service was probably stopped earlier.")
-		return
 	}
 
 	result = isEnableUI()

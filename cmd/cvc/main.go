@@ -27,7 +27,7 @@ func main() {
 		return
 	}
 
-	fmt.Println("Cisco VPN Controller (v0.2.0)")
+	fmt.Println("Cisco VPN Controller (v0.3.0)")
 	fmt.Println("----------------------------------------------")
 	fmt.Println("What do you want to do?")
 	fmt.Println("- start : Start the service and UI")
