@@ -29,7 +29,7 @@ func vpnDisconnect() bool {
 }
 
 func waitAndKill(cmd *exec.Cmd) {
-	Sleep(1500)
+	Sleep(3000)
 	if cmd != nil {
 		cmd.Process.Kill()
 	}
