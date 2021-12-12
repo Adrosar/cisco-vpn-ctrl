@@ -7,7 +7,7 @@ import (
 )
 
 func vpnDisconnect() bool {
-	cmd := exec.Command(`C:\Program Files (x86)\Cisco\Cisco AnyConnect Secure Mobility Client\vpncli.exe`, `disconnect`)
+	cmd := exec.Command(PathToExe(), `disconnect`)
 	go waitAndKill(cmd)
 
 	out, _ := cmd.Output()

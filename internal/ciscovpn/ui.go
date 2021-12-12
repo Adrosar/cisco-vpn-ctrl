@@ -34,7 +34,7 @@ func killVpnUI() bool {
 }
 
 func runVpnUI() bool {
-	cmd := exec.Command(`cmd`, `/C`, `START`, `Cisco AnyConnect Secure Mobility Client`, `C:\Program Files (x86)\Cisco\Cisco AnyConnect Secure Mobility Client\vpnui.exe`)
+	cmd := exec.Command(`cmd`, `/C`, `START`, `Cisco AnyConnect Secure Mobility Client`, PathToExe())
 	err := cmd.Start()
 	if err == nil {
 		return true

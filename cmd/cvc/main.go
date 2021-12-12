@@ -27,13 +27,15 @@ func main() {
 		return
 	}
 
-	fmt.Println("Cisco VPN Controller (v0.3.0)")
+	fmt.Println("Cisco VPN Controller (v0.4.0)")
 	fmt.Println("----------------------------------------------")
 	fmt.Println("What do you want to do?")
 	fmt.Println("- start : Start the service and UI")
 	fmt.Println("- stop  : Turn off the UI and stop the service")
 	fmt.Println("- exit  : Exit the application")
 	fmt.Println()
+
+	ciscovpn.Check()
 
 	scanner := bufio.NewScanner(os.Stdin)
 	for {
