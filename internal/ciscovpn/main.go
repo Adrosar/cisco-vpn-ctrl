@@ -57,3 +57,9 @@ func Stop() {
 
 	fmt.Println("VPN has been stopped :)")
 }
+
+func Check() {
+	if len(PathToExe()) == 0 {
+		fmt.Println(`[ERR05] The file "vpnui.exe" was not found`)
+	}
+}
