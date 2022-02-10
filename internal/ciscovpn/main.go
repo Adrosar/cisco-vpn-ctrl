@@ -1,65 +1,53 @@
 package ciscovpn
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func Start() {
-	var result bool = false
+	if WaitForServiceStatus() == -1 {
+		if !StartService() {
+			fmt.Println("[ERR01] Failed to start VPN service!")
+			fmt.Println("[.....] Maybe you don't have admin permissions?")
+			return
+		}
+	}
 
-	result = vpnStart()
-	if !result {
-		fmt.Println("[ERR01] Failed to start VPN service!")
-		fmt.Println("[.....] Maybe you don't have admin permissions?")
+	if IsEnableUI() {
+		fmt.Println("[WAR01] UI is already up and running. Check next to the clock (tray)")
 		return
 	}
 
-	result = isEnableUI()
-	if result {
-		fmt.Println("UI is already up and running. Check next to the clock (tray)")
+	if !RunUI() {
+		fmt.Println(`[ERR02] Failed to launch UI!`)
+		fmt.Println(`[.....] Maybe the file "vpnui.exe" doesn't exist!`)
 		return
 	}
 
-	Sleep(300)
-	result = runVpnUI()
-	if !result {
-		fmt.Println("[ERR02] Failed to launch UI!")
-		return
-	}
-
-	fmt.Println("VPN has been launched :)")
+	fmt.Println("VPN is running")
 }
 
 func Stop() {
-	var result bool = false
-
-	result = vpnDisconnect()
-	if !result {
-		fmt.Println("[WAR01] A problem occurred while disconnecting from VPN.")
-		fmt.Println("[.....] The service was probably stopped earlier.")
+	if IsEnableUI() {
+		if !KillUI() {
+			fmt.Println(`[ERR06] Cannot kill the UI process!`)
+			return
+		}
 	}
 
-	result = isEnableUI()
-	if result {
-		result = killVpnUI()
-		if !result {
-			fmt.Println("[ERR03] UI not disabled!")
+	if WaitForServiceStatus() == 1 {
+		if !DisconnectVPN() {
+			fmt.Println(`[ERR03] Unable to disconnect VPN!`)
+			fmt.Println(`[.....] Maybe the file "vpncli.exe" does not exist!`)
 			return
 		}
 
-		Sleep(300)
+		if !StopService() {
+			fmt.Println("[ERR04] Failed to stop VPN service!")
+			fmt.Println("[.....] Maybe you don't have admin permissions?")
+			return
+		}
 	}
 
-	result = vpnStop()
-	if !result {
-		fmt.Println("[ERR04] Failed to stop VPN service!")
-		fmt.Println("[.....] Maybe you don't have admin permissions?")
-		return
-	}
-
-	fmt.Println("VPN has been stopped :)")
-}
-
-func Check() {
-	if len(PathToExe()) == 0 {
-		fmt.Println(`[ERR05] The file "vpnui.exe" was not found`)
-	}
+	fmt.Println("VPN is stopped")
 }
