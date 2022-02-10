@@ -6,39 +6,24 @@ import (
 	"strings"
 )
 
-func isEnableUI() bool {
-	cmd := exec.Command(`cmd`, `/C`, `tasklist`)
-	out, _ := cmd.Output()
+func IsEnableUI() bool {
+	cmd := exec.Command(`tasklist`)
+	out, _ := cmd.CombinedOutput()
 	buff := bytes.NewBuffer(out)
-	c := strings.Index(buff.String(), `vpnui.exe`)
-	if c > -1 {
-		return true
-	} else {
-		return false
-	}
+	return strings.Contains(buff.String(), `vpnui.exe`)
 }
 
-func killVpnUI() bool {
-	cmd := exec.Command(`cmd`, `/C`, `taskkill /F /T /IM vpnui.exe`)
-	out, _ := cmd.Output()
+func KillUI() bool {
+	cmd := exec.Command(`taskkill`, `/F`, `/T`, `/IM`, `vpnui.exe`)
+	out, _ := cmd.CombinedOutput()
 	buff := bytes.NewBuffer(out)
-
-	c1 := strings.Index(buff.String(), `SUCCESS`)
-	c2 := strings.Index(buff.String(), `terminated`)
-
-	if c1 > -1 && c2 > -1 {
-		return true
-	}
-
-	return false
+	c1 := strings.Contains(buff.String(), `SUCCESS`)
+	c2 := strings.Contains(buff.String(), `terminated`)
+	return c1 && c2
 }
 
-func runVpnUI() bool {
-	cmd := exec.Command(`cmd`, `/C`, `START`, `Cisco AnyConnect Secure Mobility Client`, PathToExe())
+func RunUI() bool {
+	cmd := exec.Command(ExecVPNUI())
 	err := cmd.Start()
-	if err == nil {
-		return true
-	} else {
-		return false
-	}
+	return err == nil
 }

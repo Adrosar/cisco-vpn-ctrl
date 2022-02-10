@@ -6,31 +6,14 @@ import (
 	"strings"
 )
 
-func vpnDisconnect() bool {
-	cmd := exec.Command(PathToExe(), `disconnect`)
-	go waitAndKill(cmd)
+func DisconnectVPN() bool {
+	cmd := exec.Command(ExecVPNCLI(), `disconnect`)
+	out, _ := cmd.CombinedOutput()
+	str := bytes.NewBuffer(out).String()
 
-	out, _ := cmd.Output()
-	buff := bytes.NewBuffer(out)
+	c1 := strings.Contains(str, `state: Disconnecting`)
+	c2 := strings.Contains(str, `state: Disconnected`)
+	c3 := strings.Contains(str, `not connected`)
 
-	c1 := strings.Index(buff.String(), `Disconnecting`)
-	c2 := strings.Index(buff.String(), `Disconnected`)
-	c3 := strings.Index(buff.String(), `not connected`)
-
-	if c1 > -1 && c2 > -1 {
-		return true
-	}
-
-	if c2 > -1 && c3 > -1 {
-		return true
-	}
-
-	return false
-}
-
-func waitAndKill(cmd *exec.Cmd) {
-	Sleep(3000)
-	if cmd != nil {
-		cmd.Process.Kill()
-	}
+	return (c1 && c2) || (c2 && c3)
 }
