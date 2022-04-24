@@ -15,15 +15,7 @@ func main() {
 	var flagStop bool
 	flag.BoolVar(&flagStop, "stop", false, "Turn off the UI and stop the service")
 
-	var flagDev bool
-	flag.BoolVar(&flagDev, "dev", false, "DEV Mode")
-
 	flag.Parse()
-
-	if flagDev {
-		fmt.Println("DEV")
-		return
-	}
 
 	if flagStart {
 		ciscovpn.Start()
@@ -35,7 +27,7 @@ func main() {
 		return
 	}
 
-	fmt.Println("Cisco VPN Controller (v0.5.0)")
+	fmt.Println("Cisco VPN Controller (v0.5.1)")
 	fmt.Println("----------------------------------------------")
 	fmt.Println("What do you want to do?")
 	fmt.Println("- start : Start the service and UI")
@@ -62,14 +54,17 @@ func main() {
 		if text == "exit" {
 			os.Exit(0)
 		}
+
+		if len(text) == 0 {
+			fmt.Println(`Empty command`)
+		} else {
+			fmt.Println(`Unknown command`)
+		}
 	}
 }
 
 func waitAndExit() {
-	fmt.Print(`Terminal closing in:`)
-	for i := 5; i > 0; i-- {
-		fmt.Print(` `, i)
-		ciscovpn.Sleep(1000)
-	}
+	fmt.Print(`Terminal closing`)
+	ciscovpn.Sleep(1000)
 	os.Exit(0)
 }
